@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.error-message {
+    display: flex;
+    align-items: center; /* Alinea el icono y el texto */
+    font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+    color: #d9534f; /* Un rojo suave */
+    background-color: #f8d7da; /* Fondo ligero */
+    border: 1px solid #f5c6cb; /* Borde ligero */
+    padding: 0.5rem; /* Espaciado interno */
+    border-radius: 0.25rem; /* Esquinas redondeadas */
+    margin-top: 0.25rem; /* Espaciado superior */
+}
