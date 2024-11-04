@@ -47,31 +47,54 @@ export default class SignInComponent {
     ])
   });
 
-  async submit(){
+  async submit() {
     if (this.form.invalid) return;
-
+  
     try {
       const email = this.form.get('email')?.value;
       const password = this.form.get('password')?.value;
-
+  
       if (!email || !password) return;
-
-      
-
-      toast.success("Usuario creado correctamente.")
-      this._router.navigateByUrl('');
-    } catch (error) { 
-      toast.error("Error al crear el usuario.")
+  
+      // Llamar a AuthService para iniciar sesión
+      const userData = await this._authService.signIn(email, password);
+  
+      // Redireccionar basado en el rol
+      if (userData.role === 'cajero') {
+        this._router.navigateByUrl('auth/cajero-dashboard');
+      } else if (userData.role === 'usuario') {
+        this._router.navigateByUrl('auth/usuario-dashboard');
+      } else {
+        throw new Error("Rol no reconocido.");
+      }
+  
+      toast.success("Inicio de sesión exitoso.");
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
+      toast.error("Error al iniciar sesión. Verifica tus credenciales.");
     }
   }
+  
 
-  async signInGoogle(){
+  async signInGoogle() {
     try {
       await this._authService.signInWithGoogle();
-      toast.success("Usuario creado correctamente.")
+      toast.success("Inicio de sesión con Google exitoso.");
+  
+      // Obtener el usuario actual para verificar su rol
+      const currentUser = await this._authService.getCurrentUser();
+      if (currentUser?.role === 'cajero') {
+        this._router.navigateByUrl('auth/cajero-dashboard');
+      } else if (currentUser?.role === 'usuario') {
+        this._router.navigateByUrl('auth/usuario-dashboard');
+      } else {
+        throw new Error("Rol no reconocido.");
+      }
     } catch (error) {
-      toast.error("Error al crear el usuario.")
+      console.error("Error al iniciar sesión con Google:", error);
+      toast.error("Error al iniciar sesión con Google.");
     }
   }
+  
 
 }
