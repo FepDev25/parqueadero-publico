@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TarifaHorarioService } from '../../servicios/tarifa-horario.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TarifaHorarioService } from '../../../servicios/tarifa-horario.service';
 
 @Component({
   selector: 'app-cajero-tarifa-horario',

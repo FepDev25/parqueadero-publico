@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Espacio, Contrato,  EspaciosService} from '../../servicios/espacio.service';
-import { TarifaHorarioService } from '../../servicios/tarifa-horario.service';
+import { Espacio, Contrato, EspaciosService } from '../../../servicios/espacio.service';
+import { TarifaHorarioService } from '../../../servicios/tarifa-horario.service';
 
 @Component({
   selector: 'app-cajero-gestion-espacios',

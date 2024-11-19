@@ -1,15 +1,15 @@
 import { Routes } from "@angular/router";
 import { RoleGuard } from "../role.guard";
-import { CajeroDashboardComponent } from "./cajero-dashboard/cajero-dashboard.component";
-import { CajeroInicioComponent } from "./cajero-dashboard/cajero-inicio/cajero-inicio.component";
-import { CajeroGestionEspaciosComponent } from "./cajero-dashboard/cajero-gestion-espacios/cajero-gestion-espacios.component";
-import { CajeroGestionUsuariosComponent } from "./cajero-dashboard/cajero-gestion-usuarios/cajero-gestion-usuarios.component";
-import { UsuarioDashboardComponent } from "./usuario-dashboard/usuario-dashboard.component";
-import { UsuarioInicioComponent } from "./usuario-dashboard/usuario-inicio/usuario-inicio.component";
-import { MiPerfilComponent } from "./usuario-dashboard/mi-perfil/mi-perfil.component";
-import { UsuarioAdquirirContratosComponent } from "./usuario-dashboard/usuario-adquirir-contratos/usuario-adquirir-contratos.component";
-import { CajeroGestionContratosComponent } from "./cajero-dashboard/cajero-gestion-contratos/cajero-gestion-contratos.component";
-import { CajeroTarifaHorarioComponent } from "./cajero-dashboard/cajero-tarifa-horario/cajero-tarifa-horario.component";
+import { UsuarioDashboardComponent } from "../../dahsboard/features/usuario-dashboard/usuario-dashboard.component";
+import { UsuarioInicioComponent } from "../../dahsboard/features/usuario-dashboard/usuario-inicio/usuario-inicio.component";
+import { MiPerfilComponent } from "../../dahsboard/features/usuario-dashboard/mi-perfil/mi-perfil.component";
+import { UsuarioAdquirirContratosComponent } from "../../dahsboard/features/usuario-dashboard/usuario-adquirir-contratos/usuario-adquirir-contratos.component";
+import { CajeroDashboardComponent } from "../../dahsboard/features/cajero-dashboard/cajero-dashboard.component";
+import { CajeroInicioComponent } from "../../dahsboard/features/cajero-dashboard/cajero-inicio/cajero-inicio.component";
+import { CajeroGestionEspaciosComponent } from "../../dahsboard/features/cajero-dashboard/cajero-gestion-espacios/cajero-gestion-espacios.component";
+import { CajeroGestionUsuariosComponent } from "../../dahsboard/features/cajero-dashboard/cajero-gestion-usuarios/cajero-gestion-usuarios.component";
+import { CajeroGestionContratosComponent } from "../../dahsboard/features/cajero-dashboard/cajero-gestion-contratos/cajero-gestion-contratos.component";
+import { CajeroTarifaHorarioComponent } from "../../dahsboard/features/cajero-dashboard/cajero-tarifa-horario/cajero-tarifa-horario.component";
 
 export default [
     {

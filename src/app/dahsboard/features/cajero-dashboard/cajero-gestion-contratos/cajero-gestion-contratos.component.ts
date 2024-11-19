@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserServiceService, Contrato, User } from '../../servicios/user-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { User, Contrato, UserServiceService } from '../../../servicios/user-service.service';
 
 @Component({
   selector: 'app-cajero-gestion-contratos',

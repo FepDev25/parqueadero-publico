@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../data-access/auth.service';
+import { AuthService } from '../../../auth/data-access/auth.service';
 
 @Component({
   selector: 'app-cajero-dashboard',

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { User, UserServiceService } from '../../servicios/user-service.service';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../data-access/auth.service';
+import { User, UserServiceService } from '../../../servicios/user-service.service';
+import { AuthService } from '../../../../auth/data-access/auth.service';
 
 @Component({
   selector: 'app-cajero-gestion-usuarios',

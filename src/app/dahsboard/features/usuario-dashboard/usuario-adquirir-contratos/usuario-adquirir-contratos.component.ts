@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserServiceService, Contrato } from '../../servicios/user-service.service';
+import { UserServiceService, Contrato } from '../../../servicios/user-service.service';
 import { Auth } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
