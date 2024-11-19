@@ -1,21 +1,27 @@
-<!-- role-selector-modal.component.html -->
-<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-80 text-center">
-      <h2 class="text-xl font-semibold mb-4 text-gray-800">Selecciona tu rol</h2>
-      <div class="space-y-3">
-        <button
-          (click)="selectRole('usuario')"
-          class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-200"
-        >
-          Usuario
-        </button>
-        <button
-          (click)="selectRole('cajero')"
-          class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded hover:bg-green-600 transition duration-200"
-        >
-          Cajero
-        </button>
-      </div>
-    </div>
+<div class="bg-white shadow-md rounded-lg p-6 max-w-md mx-auto">
+  <h1 class="text-xl font-bold text-gray-800 mb-4">Completar Registro</h1>
+  <p class="text-sm text-gray-600 mb-4">Por favor, ingresa tu cédula para completar el registro.</p>
+
+  <!-- Campo para ingresar la cédula -->
+  <div class="mb-4">
+    <label for="cedula" class="block text-sm font-medium text-gray-700">Cédula</label>
+    <input 
+      id="cedula" 
+      [(ngModel)]="cedula" 
+      type="text" 
+      class="border p-2 w-full rounded"
+      placeholder="Ingresa tu cédula" 
+      required 
+    />
   </div>
-  
+
+  <!-- Botón para completar el registro -->
+  <div class="text-right">
+    <button 
+      (click)="completeRegistration()" 
+      class="bg-blue-500 text-white px-4 py-2 rounded"
+    >
+      Completar Registro
+    </button>
+  </div>
+</div>

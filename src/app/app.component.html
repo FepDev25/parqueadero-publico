@@ -1,2 +1,79 @@
-<router-outlet />
-<ngx-sonner-toaster>
+<header *ngIf="showHome || showOnlyHeader" class="bg-blue-900 text-white py-4 fixed w-full top-0 z-50 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="flex items-center">
+            <img src="assets/img/logoups.png" alt="Logo Parqueadero" class="h-16 mr-2">
+        </a>
+        <nav class="flex space-x-4">
+            <!-- Botones de Inicio de Sesión y Registro -->
+            <a [routerLink]="['/auth/sign-in']" class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium">Iniciar Sesión</a>
+            <a [routerLink]="['/auth/sign-up']" class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium">Regístrate</a>
+        </nav>
+    </div>
+</header>
+
+<ngx-sonner></ngx-sonner>
+<router-outlet></router-outlet>
+
+  
+  <!-- Contenido Principal -->
+  <main *ngIf="showHome" class="mt-24 flex flex-col items-center justify-center text-center text-white bg-cover bg-center min-h-screen" 
+      style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/img/fondoprincipal.png');">
+  <div class="container mx-auto px-4 flex flex-col items-center space-y-4">
+      <h1 class="text-5xl md:text-6xl font-bold leading-tight text-center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
+          ¡Optimiza la <span class="text-blue-200">gestión</span> de tu parqueadero!
+      </h1>
+      <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-center bg-black bg-opacity-50 p-4 rounded-lg">
+          Administra los espacios de tu parqueadero de manera eficiente. Te ofrecemos una <strong class="text-blue-200">plataforma completa</strong> para gestionar reservas, tarifas y disponibilidad. Todo lo que necesitas para operar con <em class="italic">eficiencia y facilidad</em>.
+      </p>
+      <a href="#aboutSection" class="inline-block mt-6 px-10 py-4 bg-blue-800 hover:bg-blue-700 text-white rounded-full font-semibold uppercase text-lg transition duration-300">
+          Explora Ahora
+      </a>
+  </div>
+  
+</main>
+
+  
+  <!-- Sección "Acerca de" -->
+  <section *ngIf="showHome" class="about container mx-auto my-20 px-4 md:px-8" id="aboutSection">
+    <div class="flex flex-wrap justify-center items-center bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
+        <div class="w-full md:w-1/2 px-4 flex justify-center space-x-4">
+            <img src="assets/img/informacion.png" alt="Espacio de Parqueadero" class="rounded-lg shadow-lg w-64 h-auto">
+            <img src="assets/img/info2.png" alt="Vista de Parqueadero" class="rounded-lg shadow-lg w-64 h-auto">
+        </div>
+        <div class="w-full md:w-1/2 px-4 text-center md:text-left mt-8 md:mt-0">
+            <h2 class="text-3xl font-bold text-blue-800 mb-4">Más de <span class="text-blue-600">10 años de experiencia</span> en la gestión de parqueaderos</h2>
+            <p class="text-gray-700">En ParkPlus, somos líderes en soluciones para la administración de parqueaderos. Con más de 10 años de experiencia, ofrecemos herramientas digitales avanzadas para mejorar la eficiencia, controlar accesos y brindar una experiencia óptima a los usuarios.</p>
+            <a href="#informationSection" class="inline-block mt-6 px-10 py-4 bg-blue-800 hover:bg-blue-700 text-white rounded-full font-semibold uppercase text-lg transition duration-300">Más Información</a>
+        </div>
+    </div>
+  </section>
+  
+  <!-- Sección de Información -->
+  <section *ngIf="showHome" class="information container mx-auto py-20 px-4 text-white text-center" id="informationSection" 
+           style="background-image: url('assets/img/seccion1.png'); background-size: cover; background-position: center;">
+    <div class="bg-black bg-opacity-70 rounded-lg p-10 max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Todo lo que necesitas para gestionar tu parqueadero</h2>
+        <p class="text-lg mb-6">
+            Desde la administración de espacios hasta el control de accesos y la definición de tarifas, nuestra plataforma simplifica la gestión de tu parqueadero. Estos son algunos de los aspectos que podrás manejar:
+        </p>
+        <ol class="text-left list-decimal list-inside mx-auto">
+            <li class="mb-2">Reservas en línea y disponibilidad en tiempo real</li>
+            <li class="mb-2">Control de acceso automatizado</li>
+            <li>Definición de tarifas y horarios de operación</li>
+        </ol>
+        <a href="#contactSection" class="inline-block mt-6 px-10 py-4 bg-blue-800 hover:bg-blue-700 text-white rounded-full font-semibold uppercase text-lg transition duration-300">Contacta con Nosotros</a>
+    </div>
+  </section>
+  
+  <!-- Sección de Contacto -->
+  <section *ngIf="showHome" class="contact container mx-auto py-20 text-center" id="contactSection">
+    <h2 class="text-3xl md:text-4xl font-bold text-blue-800 mb-4">Soporte para Usuarios</h2>
+    <p class="text-lg text-gray-700 mb-6">¿Tienes preguntas? ¿Algo salió mal? ¡Estamos aquí para ayudarte!</p>
+    <form class="flex flex-col items-center">
+        <input type="email" placeholder="Correo Electrónico" required class="w-full md:w-1/2 px-4 py-2 mb-4 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm">
+        <textarea placeholder="Escribe tu mensaje aquí" required class="w-full md:w-1/2 px-4 py-2 mb-4 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm h-32 resize-none"></textarea>
+        <button type="submit" class="px-10 py-4 bg-blue-800 hover:bg-blue-700 text-white rounded-full font-semibold uppercase text-lg transition duration-300">Enviar</button>
+    </form>
+  </section>
+
+  

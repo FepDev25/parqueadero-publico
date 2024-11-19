@@ -24,6 +24,8 @@ export default class SignInComponent {
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
 
+  mensajeError: string | null = null;
+
   esRequerido(field : 'email' | 'password'){
     return esRequerido(field, this.form);
   }
@@ -48,18 +50,20 @@ export default class SignInComponent {
   });
 
   async submit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.mostrarMensajeError("Formulario inválido.");
+      return;
+    };
   
     try {
       const email = this.form.get('email')?.value;
       const password = this.form.get('password')?.value;
+      
+      
+      if (!email || !password) return;  
   
-      if (!email || !password) return;
-  
-      // Llamar a AuthService para iniciar sesión
       const userData = await this._authService.signIn(email, password);
   
-      // Redireccionar basado en el rol
       if (userData.role === 'cajero') {
         this._router.navigateByUrl('auth/cajero-dashboard');
       } else if (userData.role === 'usuario') {
@@ -94,6 +98,13 @@ export default class SignInComponent {
       console.error("Error al iniciar sesión con Google:", error);
       toast.error("Error al iniciar sesión con Google.");
     }
+  }
+
+  mostrarMensajeError(mensaje: string) {
+    this.mensajeError = mensaje; // Establece el mensaje de error
+    setTimeout(() => {
+      this.mensajeError = null; // Oculta el mensaje después de 5 segundos
+    }, 5000);
   }
   
 

@@ -1,0 +1,46 @@
+<div class="bg-gray-100 min-h-screen p-6">
+    <h1 class="text-2xl font-bold mb-6 text-center">Gestión de Contratos</h1>
+  
+    <!-- Selección de Usuario -->
+    <div class="mb-6 max-w-md mx-auto">
+      <label for="usuarioSeleccionado" class="block text-sm font-medium text-gray-700 mb-2">Seleccionar Usuario</label>
+      <select
+        id="usuarioSeleccionado"
+        [(ngModel)]="usuarioSeleccionado"
+        (change)="filtrarContratos()"
+        class="border p-2 w-full rounded"
+      >
+        <option value="" selected>Todos los usuarios</option>
+        <!-- Solo aparecerán usuarios con rol "usuario" -->
+        <option *ngFor="let usuario of usuarios" [value]="usuario.cedula">
+          {{ usuario.nombre }} ({{ usuario.email }})
+        </option>
+      </select>
+    </div>
+    
+  
+    <!-- Lista de Contratos -->
+    <div *ngIf="contratosFiltrados.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div *ngFor="let contrato of contratosFiltrados" class="bg-white shadow-md rounded-lg p-4 relative">
+        <h2 class="text-lg font-bold text-gray-800">Sitio: {{ contrato.espacioId }}</h2>
+        <p class="text-gray-600">Usuario: {{ contrato.usuarioId }}</p>
+        <p class="text-gray-600">Costo Total: ${{ contrato.costoTotal }}</p>
+        <p class="text-gray-500">Fecha Inicio: {{ contrato.fechaInicio | date: 'dd/MM/yyyy' }}</p>
+        <p class="text-gray-500">Duración: {{ contrato.duracionMeses }} meses</p>
+        <p class="text-gray-500">Fecha Fin: {{ calcularFechaFin(contrato.fechaInicio, contrato.duracionMeses) }}</p>
+  
+        <!-- Botón para eliminar contrato -->
+        <button
+          (click)="eliminarContrato(contrato.id!)"
+          class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-sm"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  
+    <!-- Sin contratos -->
+    <div *ngIf="contratosFiltrados.length === 0" class="text-center text-gray-600 mt-8">
+      No se encontraron contratos.
+    </div>
+  </div>

@@ -1,0 +1,83 @@
+<div class="bg-gray-100 min-h-screen p-6">
+  <h1 class="text-2xl font-bold mb-6">Adquirir Contrato</h1>
+
+  <!-- Formulario para adquirir contrato -->
+  <form (ngSubmit)="adquirirContrato()" class="bg-white shadow-md rounded-lg p-4 max-w-md mx-auto mb-8">
+    <h2 class="text-lg font-bold mb-4">Nuevo Contrato</h2>
+
+    <!-- Espacio -->
+    <div class="mb-4">
+      <label for="espacioId" class="block text-sm font-medium text-gray-700">Sitio</label>
+      <input
+        id="espacioId"
+        type="number"
+        [(ngModel)]="contrato.espacioId"
+        name="espacioId"
+        required
+        class="border p-2 w-full rounded"
+        placeholder="ID del sitio"
+      />
+    </div>
+
+    <!-- Fecha de inicio -->
+    <div class="mb-4">
+      <label for="fechaInicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
+      <input
+        id="fechaInicio"
+        type="date"
+        [(ngModel)]="contrato.fechaInicio"
+        name="fechaInicio"
+        required
+        class="border p-2 w-full rounded"
+      />
+    </div>
+
+    <!-- Duración en meses -->
+    <div class="mb-4">
+      <label for="duracionMeses" class="block text-sm font-medium text-gray-700">Duración (meses)</label>
+      <input
+        id="duracionMeses"
+        type="number"
+        [(ngModel)]="contrato.duracionMeses"
+        name="duracionMeses"
+        required
+        class="border p-2 w-full rounded"
+        placeholder="Duración en meses"
+      />
+    </div>
+
+    <!-- Botón para adquirir contrato -->
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded w-full">
+      Adquirir Contrato
+    </button>
+  </form>
+
+  <!-- Lista de contratos -->
+  <div *ngIf="contratos.length > 0">
+    <h2 class="text-xl font-bold mb-4">Tus Contratos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div *ngFor="let contrato of contratos" class="bg-white shadow-md rounded-lg p-4">
+        <h3 class="text-lg font-bold text-gray-800">Sitio: {{ contrato.espacioId }}</h3>
+        <p class="text-gray-600">Costo Total: ${{ contrato.costoTotal }}</p>
+
+        <div *ngIf="contratoSeleccionado === contrato.espacioId" class="mt-4">
+          <p>Fecha Inicio: {{ contrato.fechaInicio | date: 'dd/MM/yyyy' }}</p>
+          <p>Duración: {{ contrato.duracionMeses }} meses</p>
+          <p>Fecha Fin: {{ calcularFechaFin(contrato.fechaInicio, contrato.duracionMeses) }}</p>
+        </div>
+
+        <button
+          class="mt-4 bg-blue-500 text-white px-4 py-2 rounded w-full"
+          (click)="mostrarInformacion(contrato)"
+        >
+          {{ contratoSeleccionado === contrato.espacioId ? 'Mostrar menos' : 'Más información' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje si no hay contratos -->
+  <div *ngIf="contratos.length === 0 && cedulaUsuario" class="text-center text-gray-600 mt-8">
+    No tienes contratos registrados.
+  </div>
+</div>

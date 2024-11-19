@@ -1,12 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../data-access/auth.service';
 
 @Component({
   selector: 'app-cajero-dashboard',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './cajero-dashboard.component.html',
   styles: ``
 })
-export class CajeroDashboardComponent {
+export class CajeroDashboardComponent implements OnInit {
+  menuOpen = false; // Estado del menú hamburguesa
 
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+  
+  private _authService = inject(AuthService);
+  nombreCajeroActual: string | undefined = "";
+
+  async ngOnInit() {
+    await this.obtenerNombreUsuarioActual();
+  }
+
+  async obtenerNombreUsuarioActual() {
+    const currentUser = await this._authService.getCurrentUser();
+    if (currentUser?.nombre) {
+      // Divide el nombre en palabras y toma solo las dos primeras
+      const palabras = currentUser.nombre.split(' ');
+      this.nombreCajeroActual = palabras.slice(0, 2).join(' '); // Toma las primeras dos palabras
+    } else {
+      this.nombreCajeroActual = "Cajero"; // Fallback si no hay nombre
+    }
+  }
+  
 }

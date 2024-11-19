@@ -1,0 +1,86 @@
+<main class="profile-page">
+  <section class="relative py-16 bg-gray-300">
+    <div class="container mx-auto px-4">
+      <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg">
+        <div class="px-6">
+          <!-- Imagen de perfil -->
+          <div class="flex justify-center mb-6">
+            <img 
+              [src]="localPhoto || 'assets/img/undraw_Male_avatar_g98d.png'" 
+              alt="Imagen de perfil" 
+              class="shadow-xl rounded-full h-24 w-24 align-middle border-none" 
+            />
+          </div>
+
+          <!-- Datos del perfil -->
+          <div class="text-center mb-6">
+            <h3 class="text-2xl font-semibold">{{ user.nombre || 'Usuario' }}</h3>
+            <p class="text-gray-500">{{ user.email }}</p>
+            <p class="text-gray-400">Fecha de Nacimiento: {{ user.fechaNacimiento }}</p>
+            <p class="text-gray-400">Cédula: {{ user.cedula || 'No asignada' }}</p> <!-- Mostrar cédula -->
+          </div>
+
+          <!-- Botón para editar el perfil -->
+          <div class="text-center">
+            <button 
+              (click)="toggleEditMode()" 
+              class="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+            >
+              {{ editMode ? 'Cancelar' : 'Editar Perfil' }}
+            </button>
+          </div>
+
+          <!-- Formulario para actualizar el perfil (solo si está en modo edición) -->
+          <div *ngIf="editMode" class="mt-6">
+            <h3 class="text-xl font-semibold mb-4">Actualizar Perfil</h3>
+
+            <!-- Nombre -->
+            <div class="mb-4">
+              <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+              <input id="nombre" [(ngModel)]="user.nombre" class="border p-2 w-full" />
+            </div>
+
+            <!-- Fecha de nacimiento -->
+            <div class="mb-4">
+              <label for="fechaNacimiento" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+              <input id="fechaNacimiento" type="date" [(ngModel)]="user.fechaNacimiento" class="border p-2 w-full" />
+            </div>
+
+            <!-- Cédula -->
+            <div class="mb-4">
+              <label for="cedula" class="block text-sm font-medium text-gray-700">Cédula</label>
+              <input 
+                id="cedula" 
+                [(ngModel)]="user.cedula" 
+                readonly 
+                class="border p-2 w-full bg-gray-100 cursor-not-allowed"
+              />
+            </div>
+
+            <!-- Foto de perfil -->
+            <div class="mb-4">
+              <label for="photo" class="block text-sm font-medium text-gray-700">Foto de Perfil</label>
+              <input id="photo" type="file" (change)="onFileSelected($event)" class="border p-2 w-full" />
+            </div>
+
+            <!-- Botones -->
+            <div class="flex justify-between">
+              <button 
+                (click)="saveProfile()" 
+                class="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                Guardar Cambios
+              </button>
+              <button 
+                (click)="clearProfile()" 
+                class="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Limpiar Imagen
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

@@ -1,16 +1,22 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-role-selector-modal',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './role-selector-modal.component.html',
-  styles: ``
+  styles: [],
 })
 export class RoleSelectorModalComponent {
-  @Output() roleSelected = new EventEmitter<string>();
+  @Output() cedulaCompleted = new EventEmitter<string>(); // Emitir cédula al completar
+  cedula: string = ''; // Modelo para la cédula
 
-  selectRole(role: string) {
-    this.roleSelected.emit(role);
+  completeRegistration() {
+    if (this.cedula.trim() === '') {
+      alert('Por favor, ingresa una cédula válida.');
+      return;
+    }
+    this.cedulaCompleted.emit(this.cedula); // Emitir el valor de la cédula
   }
 }

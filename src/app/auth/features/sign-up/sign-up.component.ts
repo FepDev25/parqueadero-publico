@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../data-access/auth.service';
 import { toast } from 'ngx-sonner';
 import { Router, RouterLink } from '@angular/router';
-import { Timestamp } from '@angular/fire/firestore';
 
 interface FormularioCrearCuenta {
   email: FormControl<string | null>;
@@ -13,6 +12,7 @@ interface FormularioCrearCuenta {
   nombre: FormControl<string | null>;
   fechaNacimiento: FormControl<string | null>;
   role: FormControl<string | null>;
+  cedula: FormControl<string | null>; 
 }
 
 @Component({
@@ -23,11 +23,13 @@ interface FormularioCrearCuenta {
 })
 export default class SignUpComponent {
 
+  mensajeError: string | null = null;
+
   private _authService = inject(AuthService);
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
 
-  esRequerido(field: 'email' | 'password' | 'nombre' | 'fechaNacimiento' | 'role') {
+  esRequerido(field: 'email' | 'password' | 'nombre' | 'fechaNacimiento' | 'role' | 'cedula') {
     return esRequerido(field, this.form);
   }
 
@@ -39,39 +41,56 @@ export default class SignUpComponent {
     return passwordLen(this.form);
   }
 
+  
   form = this._formBuilder.group<FormularioCrearCuenta>({
     email: this._formBuilder.control('', [Validators.required, Validators.email]),
     password: this._formBuilder.control('', [Validators.required, Validators.minLength(6)]),
     nombre: this._formBuilder.control('', [Validators.required]),
     fechaNacimiento: this._formBuilder.control('', [Validators.required]),
-    role: this._formBuilder.control('', [Validators.required])
+    role: this._formBuilder.control('', []),
+    cedula: this._formBuilder.control('', [Validators.required]),
   });
   
   async submit() {
-    if (this.form.invalid) return;
-
+    if (this.form.invalid) {
+      this.mostrarMensajeError("Formulario inválido.");
+      console.log("Formulario inválido:", this.form.value);
+      return;
+    }
+  
     try {
-      const { email, password, nombre, fechaNacimiento, role } = this.form.value;
-      if (!email || !password || !nombre || !fechaNacimiento || !role) return;
+      const { email, password, nombre, fechaNacimiento, role, cedula } = this.form.value;
+      if (!email || !password || !nombre || !fechaNacimiento) {
+        this.mostrarMensajeError("Formulario inválido.");
+        console.log("Campos faltantes en el formulario:", this.form.value);
+        return;
+      }
+  
+      const fechaNacimientoFormatted = fechaNacimiento;
 
-      const fechaNacimientoDate = new Date(fechaNacimiento);
-      const fechaNacimientoTimestamp = Timestamp.fromDate(fechaNacimientoDate); 
+      await this._authService.signUp({
+        email,
+        password,
+        nombre,
+        fechaNacimiento: fechaNacimientoFormatted,
+        role: role || 'usuario',
+        cedula: cedula || '',
+      });
 
-      await this._authService.signUp({ email, password, nombre, fechaNacimientoTimestamp, role });
-
+      
+      const currentUser = await this._authService.getCurrentUser();
       toast.success("Usuario creado correctamente.");
-
-      if (role === 'cajero') {
+      if (currentUser?.role === 'cajero') {
         this._router.navigateByUrl('/auth/cajero-dashboard');
-      } else if (role === 'usuario') {
+      } else if (currentUser?.role === 'usuario') {
         this._router.navigateByUrl('/auth/usuario-dashboard');
       }
-      
-    } catch (error) { 
+    } catch (error) {
+      console.error("Error al crear la cuenta:", error);
       toast.error("Error al crear el usuario.");
     }
   }
-
+  
   async signInGoogle() {
     try {
       await this._authService.signInWithGoogle();
@@ -87,4 +106,12 @@ export default class SignUpComponent {
       toast.error("Error al autenticarse con Google.");
     }
   }
+
+  mostrarMensajeError(mensaje: string) {
+    this.mensajeError = mensaje;
+    setTimeout(() => {
+      this.mensajeError = null;
+    }, 5000);
+  }
+
 }

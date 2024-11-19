@@ -1,0 +1,35 @@
+<section class="h-screen bg-gray-100 flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">Gestión de Tarifa</h2>
+  
+      <!-- Mostrar la tarifa actual -->
+      <p class="mb-4 text-lg text-gray-700">
+        Tarifa actual: <span class="font-bold">$ {{ tarifaActual }}</span>
+      </p>
+  
+      <!-- Entrada para actualizar la tarifa -->
+      <div class="mb-4">
+        <label for="nuevaTarifa" class="block text-sm font-medium text-gray-700 mb-2">Nueva Tarifa</label>
+        <input
+          type="text"
+          id="nuevaTarifa"
+          [(ngModel)]="nuevaTarifa"
+          class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Ingresa la nueva tarifa"
+        />
+      </div>
+  
+      <!-- Botón para guardar cambios -->
+      <button
+        (click)="actualizarTarifa()"
+        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition">
+        Actualizar Tarifa
+      </button>
+  
+      <!-- Mensaje de confirmación -->
+      <div *ngIf="mensajeConfirmacion" class="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+        {{ mensajeConfirmacion }}
+      </div>
+    </div>
+  </section>
+  
