@@ -11,7 +11,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   imports: [MatDialogModule, RouterLink, RouterModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA], // Agregar aquí
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppComponent {
   showHome: boolean = true;

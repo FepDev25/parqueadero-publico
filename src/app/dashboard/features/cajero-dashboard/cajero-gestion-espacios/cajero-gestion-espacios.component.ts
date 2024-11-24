@@ -24,6 +24,12 @@ import { TarifaHorarioService } from '../../../servicios/tarifa-horario.service'
   justify-items: center;
 }
 
+.reservado {
+  background-color: #fd7e14; /* Tomate */
+  color: white;
+}
+
+
 .espacio {
   width: 120px;
   height: 120px;
@@ -55,10 +61,6 @@ import { TarifaHorarioService } from '../../../servicios/tarifa-horario.service'
   color: white;
 }
 
-.reservado {
-  background-color: #fd7e14;
-  color: white;
-}
 
 .hora-ocupado {
   font-size: 12px;
@@ -133,9 +135,31 @@ export class CajeroGestionEspaciosComponent {
     );
   }
 
-  async ngOnInit() {
-    await this.obtenerTarifa();
+  ngOnInit() {
+    this.espaciosService.getEspacios().subscribe(
+      (espacios: Espacio[]) => {
+        this.espacios = espacios.sort((a, b) => a.id - b.id);
+        console.log('Espacios cargados:', this.espacios);
+  
+        // Marcar contratos para actualizar el estado de los espacios
+        this.espacios.forEach(espacio => {
+          if (this.esReservado(espacio.id)) {
+            espacio.reservado = true;
+          }
+        });
+      },
+      error => {
+        console.error('Error al cargar los espacios:', error);
+      }
+    );
+  
+    // Cargar contratos
+    this.espaciosService.getContratos().then((contratos) => {
+      this.contratos = contratos;
+      console.log('Contratos cargados:', this.contratos);
+    });
   }
+  
 
   async obtenerTarifa() {
     try {
@@ -162,10 +186,22 @@ export class CajeroGestionEspaciosComponent {
   async marcarComoOcupado(): Promise<void> {
     if (this.idEspacioOcupar !== null) {
       const espacio = this.espacios.find(e => e.id === this.idEspacioOcupar);
-
-      if (espacio && !espacio.ocupado) {
+  
+      if (espacio) {
+        // Verificar si el espacio está ocupado
+        if (espacio.ocupado) {
+          this.mostrarMensajeError(`El espacio con ID ${espacio.id} ya está ocupado desde las ${espacio.horaOcupado?.toLocaleTimeString() || 'una hora no registrada'}.`);
+          return;
+        }
+  
+        // Verificar si el espacio está reservado
+        if (espacio.reservado) {
+          this.mostrarMensajeError(`El espacio con ID ${espacio.id} está reservado. No puede ser marcado como ocupado.`);
+          return;
+        }
+  
         let nombreCliente: string | null = null;
-
+  
         if (this.cedulaClienteOcupar) {
           // Validar si la cédula ingresada existe
           const cedulaValida = await this.espaciosService.validarCedula(this.cedulaClienteOcupar);
@@ -173,25 +209,26 @@ export class CajeroGestionEspaciosComponent {
             this.mostrarMensajeError('La cédula ingresada no existe en el sistema.');
             return;
           }
-
+  
           // Obtener el nombre del cliente asociado a la cédula
           const cliente = await this.espaciosService.obtenerClientePorCedula(this.cedulaClienteOcupar);
           nombreCliente = cliente?.nombre || null;
         }
-
+  
+        // Marcar el espacio como ocupado
         this.espaciosService.ocuparEspacio(this.idEspacioOcupar, this.cedulaClienteOcupar)
           .then(() => {
             espacio.ocupado = true;
             espacio.horaOcupado = new Date();
             this.idEspacioOcupar = null;
-            this.cedulaClienteOcupar = ""; 
-
+            this.cedulaClienteOcupar = "";
+  
             if (nombreCliente) {
-              this.mostrarMensajeConfirmacion(`Espacio marcado: ${espacio.id}, Cliente: ${nombreCliente}`);
+              this.mostrarMensajeConfirmacion(`Espacio marcado como ocupado: ${espacio.id}, Cliente: ${nombreCliente}`);
             } else {
-              this.mostrarMensajeConfirmacion(`Espacio marcado: ${espacio.id}`);
+              this.mostrarMensajeConfirmacion(`Espacio marcado como ocupado: ${espacio.id}`);
             }
-
+  
             console.log('Espacio marcado como ocupado:', espacio);
           })
           .catch(error => {
@@ -199,12 +236,13 @@ export class CajeroGestionEspaciosComponent {
             alert('No se pudo marcar el espacio como ocupado.');
           });
       } else {
-        this.mostrarMensajeError('El espacio ya está ocupado o no es válido.');
+        this.mostrarMensajeError('El espacio no es válido.');
       }
     } else {
       this.mostrarMensajeError('Por favor, ingrese un ID de espacio válido.');
     }
   }
+  
 
   
   
@@ -230,8 +268,10 @@ export class CajeroGestionEspaciosComponent {
   }
   
   esReservado(id: number): boolean {
-    return this.contratos.some((contrato) => contrato.espacioId === id);
+    const espacio = this.espacios.find(e => e.id === id);
+    return espacio ? espacio.reservado : false;
   }
+  
 
   obtenerDetallesContrato(id: number): Contrato | undefined {
     return this.contratos.find((contrato) => contrato.espacioId === id);

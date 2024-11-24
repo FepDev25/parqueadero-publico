@@ -38,12 +38,12 @@
 
   <div class="grid-container">
     <div *ngFor="let espacio of espacios"
-         [ngClass]="{
-           'espacio': true,
-           'disponible': !espacio.ocupado && !esReservado(espacio.id),
-           'ocupado': espacio.ocupado && !esReservado(espacio.id),
-           'reservado': esReservado(espacio.id)
-         }">
+        [ngClass]="{
+          'espacio': true,
+          'disponible': !espacio.ocupado && !esReservado(espacio.id),
+          'ocupado': espacio.ocupado && !esReservado(espacio.id),
+          'reservado': esReservado(espacio.id)
+        }">
       <span>ID: {{ espacio.id }}</span>
   
       <!-- Mostrar detalles si está reservado -->
@@ -57,10 +57,12 @@
       </div>
   
       <!-- Botón para liberar el espacio -->
-      <button *ngIf="espacio.ocupado && !esReservado(espacio.id)"
-              (click)="liberarEspacio(espacio.id)" class="liberar-button">
-        Liberar
+        <button *ngIf="espacio.ocupado && !esReservado(espacio.id)"
+      (click)="liberarEspacio(espacio.id)" 
+      class="liberar-button">
+      Liberar
       </button>
+
     </div>
   </div>
   

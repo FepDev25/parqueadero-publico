@@ -45,14 +45,36 @@ export class CajeroGestionContratosComponent implements OnInit {
   async eliminarContrato(contratoId: string): Promise<void> {
     const confirmacion = confirm('¿Estás seguro de que deseas eliminar este contrato?');
     if (confirmacion) {
-      await this.userService.eliminarContrato(contratoId);
-      alert('Contrato eliminado exitosamente.');
-
-      // Actualizar la lista de contratos
-      this.contratos = this.contratos.filter((contrato) => contrato.id !== contratoId);
-      this.filtrarContratos(); // Actualizar contratos filtrados
+      // Encontrar el contrato que se va a eliminar
+      const contrato = this.contratos.find((c) => c.id === contratoId);
+  
+      if (!contrato) {
+        alert('Contrato no encontrado.');
+        return;
+      }
+  
+      try {
+        // Eliminar el contrato
+        await this.userService.eliminarContrato(contratoId);
+  
+        // Marcar el espacio correspondiente como no reservado
+        const espacioId = contrato.espacioId;
+        await this.userService.updateEspacioReservado(espacioId, false);
+  
+        alert('Contrato eliminado exitosamente.');
+  
+        // Actualizar la lista de contratos y contratos filtrados
+        this.contratos = this.contratos.filter((contrato) => contrato.id !== contratoId);
+        this.filtrarContratos();
+      } catch (error) {
+        console.error('Error al eliminar el contrato:', error);
+        alert('Hubo un error al eliminar el contrato.');
+      }
     }
   }
+
+  
+  
 
   calcularFechaFin(fechaInicio: string, duracionMeses: number): string {
     const fecha = new Date(fechaInicio);

@@ -64,6 +64,7 @@ export class EspaciosService {
     }
   }
   
+  
 
   // Liberar un espacio
   async liberarEspacio(id: number): Promise<number> {
@@ -142,6 +143,20 @@ export class EspaciosService {
     return null;
   }
 
+  async marcarEspacioComoReservado(id: number): Promise<void> {
+    const espacioDoc = doc(this.firestore, `espacios/${id}`);
+    const espacioSnapshot = await getDoc(espacioDoc);
+  
+    if (espacioSnapshot.exists()) {
+      await updateDoc(espacioDoc, {
+        reservado: true, // Actualizamos el estado a reservado
+        ocupado: false   // Aseguramos que no esté marcado como ocupado
+      });
+    } else {
+      throw new Error('El espacio no existe.');
+    }
+  }
+  
 
 
   

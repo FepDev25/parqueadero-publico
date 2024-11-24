@@ -33,6 +33,7 @@ export class UsuarioAdquirirContratosComponent implements OnInit {
   tarifaActual!: number; 
   errorMeses: boolean = false; 
   errorFecha: boolean = false; 
+  espaciosReservadosFiltrados: { id: number; reservado: boolean }[] = [];
 
 
   constructor(
@@ -65,8 +66,16 @@ export class UsuarioAdquirirContratosComponent implements OnInit {
   cargarEspacios(): void {
     this.espaciosService.getEspacios().subscribe(
       (espacios: Espacio[]) => {
-        this.espaciosDisponibles = espacios.filter(e => !e.ocupado); 
-        this.espaciosOcupadosFiltrados = espacios.filter(e => e.ocupado); 
+        // Espacios disponibles: ni ocupados ni reservados
+        this.espaciosDisponibles = espacios.filter(e => !e.ocupado && !e.reservado);
+  
+        // Espacios ocupados
+        this.espaciosOcupadosFiltrados = espacios.filter(e => e.ocupado);
+  
+        // Espacios reservados
+        this.espaciosReservadosFiltrados = espacios.filter(e => e.reservado);
+  
+        // Filtrar por rango seleccionado
         this.filtrarEspaciosPorRango();
       },
       (error) => {
@@ -75,6 +84,9 @@ export class UsuarioAdquirirContratosComponent implements OnInit {
       }
     );
   }
+  
+  
+  
   
   cargarContratos(): void {
     this.userService.getContratosPorUsuario(this.cedulaUsuario).subscribe(
@@ -99,13 +111,25 @@ export class UsuarioAdquirirContratosComponent implements OnInit {
     this.espaciosOcupadosFiltrados = this.espaciosOcupadosFiltrados.filter(
       espacio => espacio.id >= inicio && espacio.id <= fin
     );
+  
+    this.espaciosReservadosFiltrados = this.espaciosReservadosFiltrados.filter(
+      espacio => espacio.id >= inicio && espacio.id <= fin
+    );
   }
   
 
   seleccionarEspacio(id: number): void {
+    const espacioSeleccionado = this.espaciosDisponibles.find(e => e.id === id);
+  
+    if (!espacioSeleccionado) {
+      alert('El espacio seleccionado no está disponible.');
+      return;
+    }
+  
     this.espacioSeleccionado = id;
     this.contrato.espacioId = id;
   }
+  
 
   async adquirirContrato(): Promise<void> {
     if (!this.espacioSeleccionado) {
@@ -131,8 +155,8 @@ export class UsuarioAdquirirContratosComponent implements OnInit {
       // Crear el contrato en Firestore
       await this.userService.crearContrato(nuevoContrato);
   
-      // Marcar el espacio como ocupado en la colección espacios
-      await this.espaciosService.ocuparEspacio(this.espacioSeleccionado, this.cedulaUsuario);
+      // Actualizar el espacio como reservado en la colección espacios
+      await this.espaciosService.marcarEspacioComoReservado(this.espacioSeleccionado);
   
       // Recargar espacios disponibles
       this.cargarEspacios();
@@ -145,6 +169,7 @@ export class UsuarioAdquirirContratosComponent implements OnInit {
       alert('Hubo un error al adquirir el contrato.');
     }
   }
+  
   
 
   mostrarInformacion(contrato: Contrato): void {

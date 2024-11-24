@@ -75,5 +75,19 @@ export class UserServiceService {
     await deleteDoc(contratoDocRef); // Usa deleteDoc en lugar de .delete()
     console.log(`Contrato con ID ${contratoId} eliminado exitosamente.`);
   }
+
+  // Actualizar estado de reservado de un espacio
+async updateEspacioReservado(espacioId: number, reservado: boolean): Promise<void> {
+  const espacioDocRef = doc(this.firestore, `espacios/${espacioId}`);
+  const espacioDocSnap = await getDoc(espacioDocRef);
+
+  if (espacioDocSnap.exists()) {
+    await updateDoc(espacioDocRef, { reservado });
+    console.log(`Espacio ${espacioId} actualizado: reservado = ${reservado}`);
+  } else {
+    throw new Error('Espacio no encontrado.');
+  }
+}
+
 }
 
