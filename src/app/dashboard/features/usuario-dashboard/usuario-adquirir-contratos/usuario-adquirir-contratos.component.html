@@ -1,0 +1,126 @@
+<div class="container mx-auto p-6">
+  <!-- Selector de Rango -->
+  <div class="mb-4">
+    <label for="rango" class="block text-sm font-medium text-gray-700">Rango de Sitios</label>
+    <select
+      id="rango"
+      [(ngModel)]="rangoSeleccionado"
+      (change)="filtrarEspaciosPorRango()"
+      class="border p-2 w-full rounded"
+    >
+      <option *ngFor="let rango of rangosEspacios" [value]="rango">{{ rango }}</option>
+    </select>
+  </div>
+
+  <!-- Sitios Disponibles y Ocupados -->
+  <h2 class="text-xl font-semibold mb-4">Sitios</h2>
+  <p class="text-gray-600 mb-4">Seleccione el sitio de su preferencia:</p>
+  <div class="grid grid-cols-6 gap-4">
+    <div
+      *ngFor="let espacio of espaciosDisponiblesFiltrados"
+      class="p-4 bg-green-100 text-green-700 text-center border border-green-500 rounded cursor-pointer hover:bg-green-200"
+      (click)="seleccionarEspacio(espacio.id)"
+    >
+      Sitio {{ espacio.id }}
+    </div>
+    <div
+      *ngFor="let espacio of espaciosOcupadosFiltrados"
+      class="p-4 bg-red-100 text-red-700 text-center border border-red-500 rounded"
+    >
+      Sitio {{ espacio.id }} (Ocupado)
+    </div>
+  </div>
+
+  <!-- boton para mostrar el formulario -->
+  <div class="mt-6">
+    <button
+      class="bg-blue-500 text-white px-4 py-2 rounded"
+      (click)="mostrarFormulario = !mostrarFormulario"
+    >
+      {{ mostrarFormulario ? 'Ocultar Formulario' : 'Agregar Nuevo Contrato' }}
+    </button>
+  </div>
+
+
+<div *ngIf="mostrarFormulario" class="mt-4 bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+  <h3 class="text-lg font-bold text-gray-800 mb-4">Detalles del Contrato</h3>
+  <p class="text-gray-700 mb-4">Seleccione el sitio de su preferencia.</p>
+
+  <div *ngIf="espacioSeleccionado" class="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
+    <p class="text-gray-800"><strong>Sitio Seleccionado:</strong> {{ espacioSeleccionado }}</p>
+    <p class="text-gray-800"><strong>Tarifa Actual:</strong> ${{ tarifaActual }}</p>
+    <p class="text-gray-800"><strong>Costo Total:</strong> ${{ (contrato.duracionMeses || 0) * tarifaActual }}</p>
+  </div>
+
+  <!-- Formulario para añadir contrato -->
+  <form (ngSubmit)="adquirirContrato()">
+    <div class="mb-4">
+      <label for="fechaInicio" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
+      <input
+        id="fechaInicio"
+        type="date"
+        [(ngModel)]="contrato.fechaInicio"
+        name="fechaInicio"
+        required
+        class="border p-2 w-full rounded"
+        (change)="validarFecha()"
+      />
+      <p *ngIf="errorFecha" class="text-red-500 text-sm">La fecha no puede ser anterior a hoy.</p>
+    </div>
+    <div class="mb-4">
+      <label for="duracionMeses" class="block text-sm font-medium text-gray-700">Duración (meses)</label>
+      <input
+        id="duracionMeses"
+        type="number"
+        [(ngModel)]="contrato.duracionMeses"
+        name="duracionMeses"
+        required
+        class="border p-2 w-full rounded"
+        (change)="validarMeses()"
+        placeholder="Duración en meses"
+      />
+      <p *ngIf="errorMeses" class="text-red-500 text-sm">Los meses de renta deben ser mayores a 0.</p>
+    </div>
+
+    <button
+      type="submit"
+      class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full"
+    >
+      Confirmar Contrato
+    </button>
+  </form>
+</div>
+
+
+
+  <!-- Contratos del usuario -->
+  <div *ngIf="contratos.length > 0" class="mt-10">
+    <h2 class="text-xl font-bold mb-4">Tus Contratos</h2>
+    <div class="grid grid-cols-3 gap-4">
+      <div *ngFor="let contrato of contratos" class="border p-4 rounded shadow-sm bg-gray-100 text-left">
+        <p class="font-bold">Sitio: {{ contrato.espacioId }}</p>
+        <p class="text-gray-600">Costo Total: ${{ contrato.costoTotal }}</p>
+        <div *ngIf="contratoSeleccionado === contrato.espacioId">
+          <p class="text-gray-600">Fecha Inicio: {{ contrato.fechaInicio }}</p>
+          <p class="text-gray-600">Duración: {{ contrato.duracionMeses }} meses</p>
+          <p class="text-gray-600">
+            Fecha Fin: {{ calcularFechaFin(contrato.fechaInicio, contrato.duracionMeses) }}
+          </p>
+          <button
+            class="bg-blue-500 text-white mt-2 px-4 py-2 rounded hover:bg-blue-600"
+            (click)="mostrarInformacion(contrato)"
+          >
+            Ocultar Información
+          </button>
+        </div>
+        <button
+          *ngIf="contratoSeleccionado !== contrato.espacioId"
+          class="bg-blue-500 text-white mt-2 px-4 py-2 rounded hover:bg-blue-600"
+          (click)="mostrarInformacion(contrato)"
+        >
+          Más Información
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
