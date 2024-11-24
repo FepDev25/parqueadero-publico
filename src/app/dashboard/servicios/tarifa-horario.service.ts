@@ -22,4 +22,18 @@ export class TarifaHorarioService {
   async actualizarTarifa(valor: string): Promise<void> {
     await updateDoc(this.tarifaDocRef, { valor });
   }
+
+  async obtenerHorario(tipo: string): Promise<{ apertura: string; cierre: string }> {
+    const horarioDocRef = doc(this.firestore, `horarios/${tipo}`);
+    const horarioSnapshot = await getDoc(horarioDocRef);
+    if (horarioSnapshot.exists()) {
+      return horarioSnapshot.data() as { apertura: string; cierre: string };
+    }
+    throw new Error(`No se encontró el horario de ${tipo}`);
+  }
+
+  async actualizarHorario(tipo: string, apertura: string, cierre: string): Promise<void> {
+    const horarioDocRef = doc(this.firestore, `horarios/${tipo}`);
+    await updateDoc(horarioDocRef, { apertura, cierre });
+  }
 }
