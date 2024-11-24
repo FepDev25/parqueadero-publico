@@ -19,13 +19,8 @@
   <router-outlet></router-outlet>
 </main>
 
-
-
-  
-  
-
 <!-- Contenido Principal -->
-<main *ngIf="showHome" class="mt-24 flex flex-col items-center justify-center text-center text-white bg-cover bg-center min-h-screen" 
+<section *ngIf="showHome" class="mt-24 flex flex-col items-center justify-center text-center text-white bg-cover bg-center min-h-screen" 
     style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/img/fondoprincipal.png');">
 <div class="container mx-auto px-4 flex flex-col items-center space-y-4">
     <h1 class="text-5xl md:text-6xl font-bold leading-tight text-center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
@@ -39,7 +34,7 @@
     </a>
 </div>
 
-</main>
+</section>
 
 
 <!-- Sección "Acerca de" -->
@@ -84,3 +79,15 @@
       <button type="submit" class="px-10 py-4 bg-blue-800 hover:bg-blue-700 text-white rounded-full font-semibold uppercase text-lg transition duration-300">Enviar</button>
   </form>
 </section>
+
+<footer *ngIf="showHome" class="bg-[#173b61] text-white text-center py-5 relative">
+    <div class="footer-content">
+        <div class="link">
+            <h3>Conéctate con Nosotros</h3>
+            <a href="#" class="text-white hover:underline">Facebook</a>
+            <a href="#" class="text-white hover:underline">Twitter</a>
+            <a href="#" class="text-white hover:underline">Instagram</a>
+        </div>
+    </div>
+    <p class="mt-2">&copy; 2024 EduPlus. Todos los derechos reservados.</p>
+</footer>

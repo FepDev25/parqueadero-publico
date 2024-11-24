@@ -77,17 +77,25 @@ export class UserServiceService {
   }
 
   // Actualizar estado de reservado de un espacio
-async updateEspacioReservado(espacioId: number, reservado: boolean): Promise<void> {
-  const espacioDocRef = doc(this.firestore, `espacios/${espacioId}`);
-  const espacioDocSnap = await getDoc(espacioDocRef);
+  async updateEspacioReservado(espacioId: number, reservado: boolean): Promise<void> {
+    const espacioDocRef = doc(this.firestore, `espacios/${espacioId}`);
+    const espacioDocSnap = await getDoc(espacioDocRef);
 
-  if (espacioDocSnap.exists()) {
-    await updateDoc(espacioDocRef, { reservado });
-    console.log(`Espacio ${espacioId} actualizado: reservado = ${reservado}`);
-  } else {
-    throw new Error('Espacio no encontrado.');
+    if (espacioDocSnap.exists()) {
+      await updateDoc(espacioDocRef, { reservado });
+      console.log(`Espacio ${espacioId} actualizado: reservado = ${reservado}`);
+    } else {
+      throw new Error('Espacio no encontrado.');
+    }
   }
-}
+
+  async updateContrato(contratoId: string, contrato: Partial<Contrato>): Promise<void> {
+    const contratoDocRef = doc(this.firestore, `contratos/${contratoId}`);
+    await updateDoc(contratoDocRef, contrato);
+    console.log(`Contrato con ID ${contratoId} actualizado exitosamente.`);
+  }
+  
+
 
 }
 

@@ -5,6 +5,12 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: transparent; /* Si hay un fondo, asegúrate de que sea transparente */
+  background-color: transparent;
 }
 
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background-color: #173b61; /* Color del footer */
+}

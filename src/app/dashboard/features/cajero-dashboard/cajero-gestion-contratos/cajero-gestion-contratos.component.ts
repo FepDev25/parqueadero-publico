@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { User, Contrato, UserServiceService } from '../../../servicios/user-service.service';
+import { TarifaHorarioService } from '../../../servicios/tarifa-horario.service';
 
 @Component({
   selector: 'app-cajero-gestion-contratos',
@@ -14,32 +15,50 @@ export class CajeroGestionContratosComponent implements OnInit {
   contratos: Contrato[] = []; // Lista de contratos
   contratosFiltrados: Contrato[] = []; // Contratos filtrados por usuario
   usuarioSeleccionado: string = ''; // Usuario seleccionado (cédula)
+  selectedContrato: Contrato | null = null;
+  tarifaBase: number = 0;
 
-  constructor(private userService: UserServiceService) {}
+  constructor(
+    private userService: UserServiceService,
+    private tarifaHorarioService: TarifaHorarioService
+  ) {}
 
   ngOnInit(): void {
-    // Cargar todos los usuarios
+    // Cargar usuarios y contratos
     this.userService.getAllUsers().subscribe((usuarios: User[]) => {
       this.usuarios = usuarios;
     });
 
-    // Cargar todos los contratos
     this.userService.getAllContratos().subscribe((contratos: Contrato[]) => {
       this.contratos = contratos;
-      this.contratosFiltrados = contratos; // Inicialmente, mostrar todos
+      this.contratosFiltrados = contratos; // Mostrar todos inicialmente
     });
+
+    // Obtener la tarifa actual
+    this.cargarTarifaActual();
+  }
+
+  async cargarTarifaActual(): Promise<void> {
+    try {
+      const datos = await this.tarifaHorarioService.obtenerDatos();
+      this.tarifaBase = parseFloat(datos.valor); // Convertimos a número
+    } catch (error) {
+      console.error('Error al cargar la tarifa:', error);
+    }
   }
 
   filtrarContratos(): void {
     if (this.usuarioSeleccionado) {
-      // Filtrar contratos por usuario seleccionado
       this.contratosFiltrados = this.contratos.filter(
         (contrato) => contrato.usuarioId === this.usuarioSeleccionado
       );
     } else {
-      // Si no hay usuario seleccionado, mostrar todos
-      this.contratosFiltrados = this.contratos;
+      this.contratosFiltrados = this.contratos; // Mostrar todos
     }
+  }
+
+  selectContrato(contrato: Contrato): void {
+    this.selectedContrato = { ...contrato }; // Crear una copia para editar
   }
 
   async eliminarContrato(contratoId: string): Promise<void> {
@@ -73,12 +92,39 @@ export class CajeroGestionContratosComponent implements OnInit {
     }
   }
 
+  recalcularCosto(): void {
+    if (this.selectedContrato && this.selectedContrato.duracionMeses) {
+      this.selectedContrato.costoTotal =
+        this.selectedContrato.duracionMeses * this.tarifaBase;
+    }
+  } 
   
   
 
   calcularFechaFin(fechaInicio: string, duracionMeses: number): string {
     const fecha = new Date(fechaInicio);
     fecha.setMonth(fecha.getMonth() + duracionMeses);
-    return fecha.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    return fecha.toISOString().split('T')[0];
+  }
+ 
+  
+  async saveContrato(): Promise<void> {
+    if (this.selectedContrato && this.selectedContrato.id) {
+      try {
+        await this.userService.updateContrato(this.selectedContrato.id, this.selectedContrato);
+        alert('Contrato actualizado exitosamente.');
+        this.cancelEdit(); // Reinicia el formulario y selecciona un nuevo contrato
+      } catch (error) {
+        console.error('Error al actualizar el contrato:', error);
+        alert('Hubo un error al actualizar el contrato.');
+      }
+    } else {
+      alert('No se pudo identificar el contrato para actualizar.');
+    }
+  }
+  
+  
+  cancelEdit(): void {
+    this.selectedContrato = null;
   }
 }
