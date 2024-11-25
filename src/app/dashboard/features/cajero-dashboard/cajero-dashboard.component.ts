@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../auth/data-access/auth.service';
 import { FooterComponent } from '../../../home/footer/footer.component';
 
@@ -11,7 +11,8 @@ import { FooterComponent } from '../../../home/footer/footer.component';
   styles: ``
 })
 export class CajeroDashboardComponent implements OnInit {
-  menuOpen = false; // Estado del menú hamburguesa
+  menuOpen = false;
+  private _router = inject(Router);
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
@@ -33,6 +34,14 @@ export class CajeroDashboardComponent implements OnInit {
     } else {
       this.nombreCajeroActual = "Cajero"; // Fallback si no hay nombre
     }
+  }
+
+  logout() {
+    this._authService.logout().then(() => {
+      this._router.navigate(['/auth/sign-in']);
+    }).catch((error) => {
+      console.error('Error al cerrar sesión:', error);
+    });
   }
   
 }

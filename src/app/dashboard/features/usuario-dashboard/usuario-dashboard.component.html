@@ -57,42 +57,60 @@
               >Mi perfil</a
             >
           </li>
+          <li>
+            <button
+              class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+              (click)="logout()"
+            >
+              Cerrar Sesión
+            </button>
+          </li>
         </ul>
+        
       </div>
 
       <!-- Menú hamburguesa desplegable -->
       <div
-        class="md:hidden"
-        [class.hidden]="!menuOpen"
-        class="block mt-4"
-      >
-        <ul class="flex flex-col space-y-4">
-          <li>
-            <a
-              routerLink="inicio-usuario"
-              routerLinkActive="text-gold-500 font-semibold"
-              class="hover:text-gold-500 transition duration-200"
-              >Inicio</a
-            >
-          </li>
-          <li>
-            <a
-              routerLink="contratos-usuario"
-              routerLinkActive="text-gold-500 font-semibold"
-              class="hover:text-gold-500 transition duration-200"
-              >Contratos</a
-            >
-          </li>
-          <li>
-            <a
-              routerLink="mi-perfil"
-              routerLinkActive="text-gold-500 font-semibold"
-              class="hover:text-gold-500 transition duration-200"
-              >Mi perfil</a
-            >
-          </li>
-        </ul>
-      </div>
+      class="md:hidden"
+      [class.hidden]="!menuOpen"
+      class="block mt-4"
+    >
+      <ul class="flex flex-col space-y-4">
+        <li>
+          <a
+            routerLink="inicio-usuario"
+            routerLinkActive="text-gold-500 font-semibold"
+            class="hover:text-gold-500 transition duration-200"
+            >Inicio</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="contratos-usuario"
+            routerLinkActive="text-gold-500 font-semibold"
+            class="hover:text-gold-500 transition duration-200"
+            >Contratos</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="mi-perfil"
+            routerLinkActive="text-gold-500 font-semibold"
+            class="hover:text-gold-500 transition duration-200"
+            >Mi perfil</a
+          >
+        </li>
+        <li>
+          <button
+            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+            (click)="logout()"
+          >
+            Cerrar Sesión
+          </button>
+        </li>
+      </ul>
+    </div>
+    
     </nav>
 
     <!-- Contenido del dashboard -->

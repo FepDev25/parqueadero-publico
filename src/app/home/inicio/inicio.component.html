@@ -1,23 +1,48 @@
-<header *ngIf="showHome || showOnlyHeader" class="bg-blue-900 text-white py-4 fixed w-full top-0 z-50 shadow-md">
-    <div class="container mx-auto flex justify-between items-center">
-        <a href="#" class="flex items-center">
-            <img src="assets/img/logoups.png" alt="Logo Parqueadero" class="h-16 mr-2">
-        </a>
-        <nav class="flex space-x-4">
-            <a [routerLink]="['/auth/sign-in']" class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium">Iniciar Sesión</a>
-            <a [routerLink]="['/auth/sign-up']" class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium">Regístrate</a>
-        </nav>
-    </div>
+<header
+  *ngIf="showHome || showOnlyHeader"
+  class="bg-blue-900 text-white py-6 fixed w-full top-0 z-50 shadow-md"
+>
+  <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+    <!-- Logo -->
+    <a href="#" class="flex items-center">
+      <img src="assets/img/logoups.png" alt="Logo Parqueadero" class="h-12">
+    </a>
+
+    <!-- Navegación -->
+    <nav
+      class="flex flex-col sm:flex-row sm:space-x-4 w-full sm:w-auto space-y-2 sm:space-y-0 items-center"
+    >
+      <a
+        [routerLink]="['/auth/sign-in']"
+        class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium text-center"
+      >
+        Iniciar Sesión
+      </a>
+      <a
+        [routerLink]="['/auth/sign-up']"
+        class="text-lg bg-blue-800 hover:bg-blue-700 text-white rounded-lg px-5 py-2 font-medium text-center"
+      >
+        Regístrate
+      </a>
+    </nav>
+  </div>
 </header>
+
+
+
 
 <main
   [ngClass]="{
-    'mt-16 sm:mt-0': showHome || showOnlyHeader
+    'mt-44 sm:mt-16': showHome || showOnlyHeader
   }"
   class="bg-cover bg-no-repeat"
-  style="background-image: url('assets/img/fondoprincipal.png');">
+  style="background-image: url('assets/img/fondoprincipal.png');"
+>
   <router-outlet></router-outlet>
 </main>
+
+
+
 
 <section *ngIf="showHome">
     <app-main-content></app-main-content>

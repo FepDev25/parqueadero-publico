@@ -47,6 +47,18 @@ export class AuthService {
     return null;
   }
 
+  async logout(): Promise<void> {
+    try {
+      await this._auth.signOut(); 
+      this.router.navigate(['/auth/sign-in']); 
+      toast.success('Sesión cerrada correctamente.');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      toast.error('Error al cerrar sesión.');
+    }
+  }
+  
+
   async signUp(user: User) {
     try {
       const allowedEmailsCollection = collection(this._firestore, 'allowedEmails');
