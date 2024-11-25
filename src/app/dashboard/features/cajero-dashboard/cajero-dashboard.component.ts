@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../auth/data-access/auth.service';
+import { FooterComponent } from '../../../home/footer/footer.component';
 
 @Component({
   selector: 'app-cajero-dashboard',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, FooterComponent],
   templateUrl: './cajero-dashboard.component.html',
   styles: ``
 })

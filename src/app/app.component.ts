@@ -1,29 +1,14 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
-import { RouterLink, RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { InicioComponent } from './home/inicio/inicio.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MatDialogModule, RouterLink, RouterModule, CommonModule],
+  imports: [InicioComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppComponent {
-  showHome: boolean = true;
-  showOnlyHeader: boolean = false;
-
-  constructor(private router: Router) {
-    this.router.events.subscribe(() => {
-      const onlyHeaderRoutes = ['/auth/sign-in', '/auth/sign-up'];
-      const hideHeaderRoutes = ['/auth/cajero-dashboard', '/auth/usuario-dashboard'];
-
-      this.showOnlyHeader = onlyHeaderRoutes.some(route => this.router.url.startsWith(route));
-      this.showHome = !hideHeaderRoutes.some(route => this.router.url.startsWith(route)) && !this.showOnlyHeader;
-    });
-  }
 }
